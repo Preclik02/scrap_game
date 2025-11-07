@@ -40,11 +40,26 @@
 #include <string.h>
 #include <unistd.h>
 #include <curl/curl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 
 ///////////////
 ///Functions///
 ///////////////
+void check_folder() {
+  const char *home = getenv("HOME");
+  if (!home) return;
+
+  char path[512];
+  snprintf(path, sizeof(path), "%s/.scrap", home);
+
+  struct stat st = {0};
+  if (stat(path, &st) == -1) {
+    mkdir(path, 0700);
+    printf("[+] Created folder: %s\n", path);
+  }
+}
 void show_stats(char *username, int star, int scrap, double scrap_lvl, int scrap_lvl_cost, int star_cost, int gold_scrap) {
   printf("\n\nusername - %s\nstars - %d\nscrap - %d\nscrap per action - %lf\nscrap upgrade cost - %d\nstar cost - %d\ngold scrap - %d\n\n", username, star, scrap, scrap_lvl, scrap_lvl_cost, star_cost, gold_scrap);
 }
@@ -175,6 +190,8 @@ int main() {
   int scrap = 0;
   int scrap_lvl_cost = 10;
   int gold_scrap = 0;
+
+  check_folder();
 
 
   while (1) {
