@@ -1,4 +1,5 @@
 **SCRAP-GAME**
+
 *Instalation*
 ```shell
 yay -S scrap-game
