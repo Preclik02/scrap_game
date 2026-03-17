@@ -202,7 +202,8 @@ int main() {
     }
 
     printf("[-] Action >> ");
-    scanf("%99s", x);
+    fgets(x, sizeof(x), stdin);
+    x[strcspn(x, "\n")] = '\0';
 
     if (strcmp(x, "help") == 0) {
       printf("\n\n[+] help\nscrap\nupgrades\nstats\nquit\nsave/load\nauto-scrap\nflex\nrestart\n\n[+] Read documentation for important info about commands\n\n");
