@@ -1,4 +1,3 @@
-
 // --- EXPLANATION  --- //
 // So like this works basicly with bunch of functions for some complexier things
 // like save and load. Almost all variables are declared on the top of main loop
@@ -28,7 +27,7 @@
 
 // Hours spend here ~10
 
-// Last thing done --> Making the gs to grow by scrap / 10 = gs you will get
+// Last thing done --> Made the input use fgets() instead of scanf()
 
 //Always remember to compile with -lcurl
 
@@ -47,6 +46,14 @@
 ///////////////
 ///Functions///
 ///////////////
+
+void format_scrap(char *buf, size_t size, double scrap) {
+  if (scrap < 1000000.0)
+    snprintf(buf, size, "%.0f", scrap);
+  else
+    snprintf(buf, size, "%e", scrap);
+}
+
 void check_folder() {
   const char *home = getenv("HOME");
   if (!home) return;
@@ -60,10 +67,12 @@ void check_folder() {
     printf("[+] Created folder: %s\n", path);
   }
 }
-void show_stats(char *username, int star, int scrap, double scrap_lvl, int scrap_lvl_cost, int star_cost, int gold_scrap) {
-  printf("\n\nusername - %s\nstars - %d\nscrap - %d\nscrap per action - %lf\nscrap upgrade cost - %d\nstar cost - %d\ngold scrap - %d\n\n", username, star, scrap, scrap_lvl, scrap_lvl_cost, star_cost, gold_scrap);
+void show_stats(char *username, int star, double scrap, double scrap_lvl, int scrap_lvl_cost, int star_cost, int gold_scrap) {
+  char scrap_buf[64];
+  format_scrap(scrap_buf, sizeof(scrap_buf), scrap);
+  printf("\n\nusername - %s\nstars - %d\nscrap - %s\nscrap per action - %lf\nscrap upgrade cost - %d\nstar cost - %d\ngold scrap - %d\n\n", username, star, scrap_buf, scrap_lvl, scrap_lvl_cost, star_cost, gold_scrap);
 }
-void save_game(char *username, int star, int scrap, double scrap_lvl, int scrap_lvl_cost, int star_cost, int gold_scrap) {
+void save_game(char *username, int star, double scrap, double scrap_lvl, int scrap_lvl_cost, int star_cost, int gold_scrap) {
 
   const char *home = getenv("HOME");
 
@@ -84,13 +93,13 @@ void save_game(char *username, int star, int scrap, double scrap_lvl, int scrap_
     return;
   }
 
-  fprintf(file, "%s\n%d\n%d\n%lf\n%d\n%d\n%d", username, star, scrap, scrap_lvl, scrap_lvl_cost, star_cost, gold_scrap);
+  fprintf(file, "%s\n%d\n%le\n%lf\n%d\n%d\n%d", username, star, scrap, scrap_lvl, scrap_lvl_cost, star_cost, gold_scrap);
 
   fclose(file);
 
   printf("[+] File saved successfully\n");
 }
-void load_game(char *username, int *star, int *scrap, double *scrap_lvl, int *scrap_lvl_cost, int *star_cost, int *gold_scrap) {
+void load_game(char *username, int *star, double *scrap, double *scrap_lvl, int *scrap_lvl_cost, int *star_cost, int *gold_scrap) {
 
   const char *home = getenv("HOME");
 
@@ -111,14 +120,14 @@ void load_game(char *username, int *star, int *scrap, double *scrap_lvl, int *sc
     return;
   }
 
-  fscanf(file, "%s\n%d\n%d\n%lf\n%d\n%d\n%d", username, star, scrap, scrap_lvl, scrap_lvl_cost, star_cost, gold_scrap);
+  fscanf(file, "%s\n%d\n%le\n%lf\n%d\n%d\n%d", username, star, scrap, scrap_lvl, scrap_lvl_cost, star_cost, gold_scrap);
 
   fclose(file);
 
   printf("[+] Save file loaded successfully\n");
 }
 
-void auto_scrap(int *scrap, double scrap_lvl) {
+void auto_scrap(double *scrap, double scrap_lvl) {
 
   int time;
 
@@ -135,7 +144,7 @@ void auto_scrap(int *scrap, double scrap_lvl) {
   printf("[+] Time has passed, enjoy your scrap");
 }
 
-void flex(char *username, int star, int scrap, double scrap_lvl, int gold_scrap) {
+void flex(char *username, int star, double scrap, double scrap_lvl, int gold_scrap) {
 
   printf("\n[+] Flexing is that you will flex your stats on Discord\n");
 
@@ -145,11 +154,13 @@ void flex(char *username, int star, int scrap, double scrap_lvl, int gold_scrap)
 
   printf("\nUsername --> %s", username);
   printf("\nStar(s) --> %d", star);
-  printf("\nScrap --> %d", scrap);
+  char scrap_buf[64];
+  format_scrap(scrap_buf, sizeof(scrap_buf), scrap);
+  printf("\nScrap --> %s", scrap_buf);
   printf("\nSPA --> %lf", scrap_lvl);
   printf("\nGolden scrap(s) --> %d\n\n", gold_scrap);
 
-  snprintf(MESSAGE, sizeof(MESSAGE), "{\"content\": \"\\nUsername --> %s\\nStar(s) --> %d\\nScrap --> %d\\nSPA --> %lf\\nGolden scrap(s) --> %d\"}", username, star, scrap, scrap_lvl, gold_scrap);
+  snprintf(MESSAGE, sizeof(MESSAGE), "{\"content\": \"\\nUsername --> %s\\nStar(s) --> %d\\nScrap --> %s\\nSPA --> %lf\\nGolden scrap(s) --> %d\"}", username, star, scrap_buf, scrap_lvl, gold_scrap);
 
   CURL *curl = curl_easy_init();
   if (!curl) {
@@ -187,7 +198,7 @@ int main() {
 
   int star = 0;
   int star_cost = 1000;
-  int scrap = 0;
+  double scrap = 0.0;
   int scrap_lvl_cost = 10;
   int gold_scrap = 0;
 
@@ -210,8 +221,10 @@ int main() {
     }
 
     else if (strcmp(x, "scrap") == 0) {
-      printf("[+] +%lf scrap\n\n", scrap_lvl);
       scrap += scrap_lvl;
+      char scrap_buf[64];
+      format_scrap(scrap_buf, sizeof(scrap_buf), scrap);
+      printf("[+] +%lf scrap | total: %s\n\n", scrap_lvl, scrap_buf);
     }
 
     else if (strcmp(x, "upgrades") == 0) {
@@ -254,16 +267,16 @@ int main() {
 
       char y[10];
 
-      int z = scrap / 5;
+      double z = scrap / 5.0;
 
       printf("\n[+] By reseting your scrap will be 0 again\n");
       printf("[-] Do you want to reset (y/n) >> ");
       scanf("%9s", y);
 
       if (strcmp(y, "y") == 0) {
-        scrap = 0;
-        gold_scrap += z;
-        printf("\n[+] Sucessfully got +%d gs enjoy\n", z);
+        scrap = 0.0;
+        gold_scrap += (int)z;
+        printf("\n[+] Sucessfully got +%d gs enjoy\n", (int)z);
       }
 
       else if (strcmp(y, "n") == 0) {
