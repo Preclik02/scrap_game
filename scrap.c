@@ -195,10 +195,10 @@ int main() {
   char username[256] = {0};
 
   double scrap_lvl = 1.0;
+  double scrap = 0.0;
 
   int star = 0;
   int star_cost = 1000;
-  double scrap = 0.0;
   int scrap_lvl_cost = 10;
   int gold_scrap = 0;
 
