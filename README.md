@@ -8,6 +8,7 @@ yay -S scrap-game
 - commands ...
 
 *curl function*
+
 If you would like to see your progress being flexed join my discord server --> https://discord.gg/9n2dqdzbcK
 
 
