@@ -146,7 +146,8 @@ void auto_scrap(double *scrap, double scrap_lvl) {
 
 void flex(char *username, int star, double scrap, double scrap_lvl, int gold_scrap) {
 
-  printf("\n[+] Flexing is that you will flex your stats on Discord\n");
+  printf("\n[+] Flexing is that you will flex your stats on Discord");
+  printf("\n[+] You can check out the discord here --> https://discord.gg/9n2dqdzbcK\n");
 
   char MESSAGE[500];
 
