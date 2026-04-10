@@ -25,9 +25,9 @@
 
 // with love --preclik02
 
-// Hours spend here ~10
+// Hours spend here ~11
 
-// Last thing done --> Made the input use fgets() instead of scanf()
+// Last thing done --> ANSI COLORS 
 
 //Always remember to compile with -lcurl
 
@@ -64,20 +64,20 @@ void check_folder() {
   struct stat st = {0};
   if (stat(path, &st) == -1) {
     mkdir(path, 0700);
-    printf("[+] Created folder: %s\n", path);
+    printf("[+] Created folder: \033[32m%s\033[0m\n", path);
   }
 }
 void show_stats(char *username, int star, double scrap, double scrap_lvl, int scrap_lvl_cost, int star_cost, int gold_scrap) {
   char scrap_buf[64];
   format_scrap(scrap_buf, sizeof(scrap_buf), scrap);
-  printf("\n\nusername - %s\nstars - %d\nscrap - %s\nscrap per action - %lf\nscrap upgrade cost - %d\nstar cost - %d\ngold scrap - %d\n\n", username, star, scrap_buf, scrap_lvl, scrap_lvl_cost, star_cost, gold_scrap);
+  printf("\n\nusername - \033[32m%s\033[0m\nstars - \033[33m%d\033[0m\nscrap - \033[33m%s\033[0m\nscrap per action - \033[33m%lf\033[0m\nscrap upgrade cost - \033[33m%d\033[0m\nstar cost - \033[33m%d\033[0m\ngold scrap - \033[33m%d\033[0m\n\n", username, star, scrap_buf, scrap_lvl, scrap_lvl_cost, star_cost, gold_scrap);
 }
 void save_game(char *username, int star, double scrap, double scrap_lvl, int scrap_lvl_cost, int star_cost, int gold_scrap) {
 
   const char *home = getenv("HOME");
 
   if (!home) {
-    printf("[+] Error while finding the home enviroment\n");
+    printf("\033[31m[+] Error while finding the home enviroment\033[0m\n");
     return;
   }
 
@@ -89,7 +89,7 @@ void save_game(char *username, int star, double scrap, double scrap_lvl, int scr
   FILE *file = fopen(path, "w");
 
   if (!file) {
-    printf("[+] Error opening file, please make sure you have folder .scrap and all needed files\n");
+    printf("\n\033[31m[+] Error opening file, please make sure you have folder .scrap and all needed files\033[0m\n");
     return;
   }
 
@@ -97,14 +97,14 @@ void save_game(char *username, int star, double scrap, double scrap_lvl, int scr
 
   fclose(file);
 
-  printf("[+] File saved successfully\n");
+  printf("\n\033[32m[+] File saved successfully\033[0m\n");
 }
 void load_game(char *username, int *star, double *scrap, double *scrap_lvl, int *scrap_lvl_cost, int *star_cost, int *gold_scrap) {
 
   const char *home = getenv("HOME");
 
   if (!home) {
-    printf("[+] Error while finding the home enviroment\n");
+    printf("\033[31m[+] Error while finding the home enviroment\033[0m\n");
     return;
   }
 
@@ -116,7 +116,7 @@ void load_game(char *username, int *star, double *scrap, double *scrap_lvl, int 
   FILE *file = fopen(path, "r");
 
   if (!file) {
-    printf("[+] Error while opening the save file, plese make sure you have the files as recommended\n");
+    printf("\n\033[31m[+] Error while opening the save file, plese make sure you have the files as recommended\033[0m\n");
     return;
   }
 
@@ -124,7 +124,7 @@ void load_game(char *username, int *star, double *scrap, double *scrap_lvl, int 
 
   fclose(file);
 
-  printf("[+] Save file loaded successfully\n");
+  printf("\033[32m[+] Save file loaded successfully\033[0m\n");
 }
 
 void auto_scrap(double *scrap, double scrap_lvl) {
@@ -134,38 +134,38 @@ void auto_scrap(double *scrap, double scrap_lvl) {
   printf("[-] Time for how long will it give you scrap (per second) >> ");
   scanf("%d", &time);
 
-  printf("[+] Starting auto scrap for %d seconds\n", time);
+  printf("[+] Starting auto scrap for \033[33m%d seconds\033[0m\n", time);
 
   for(int i = 1; i <= time; i ++) {
-    printf("%d sec + %lf scrap\n\n", i, scrap_lvl);
+    printf("%d sec + \033[33m%lf scrap\033[0m\n\n", i, scrap_lvl);
     *scrap += scrap_lvl;
     sleep(1);
   }
-  printf("[+] Time has passed, enjoy your scrap");
+  printf("\033[32m[+] Time has passed, enjoy your scrap\033[0m");
 }
 
 void flex(char *username, int star, double scrap, double scrap_lvl, int gold_scrap) {
 
   printf("\n[+] Flexing is that you will flex your stats on Discord");
-  printf("\n[+] You can check out the discord here --> https://discord.gg/9n2dqdzbcK\n");
+  printf("\n[+] You can check out the discord here --> \033[35mhttps://discord.gg/9n2dqdzbcK\033[0m\n");
 
   char MESSAGE[500];
 
   const char *WEBHOOK = "https://discord.com/api/webhooks/1434289688855842856/PglCXsQ5LMETyasgYH5GFoQLoW6lrWGCvKEJiVqMCE34o2zVwZwGVfdGKZ2bf0uw8DSH";
 
-  printf("\nUsername --> %s", username);
-  printf("\nStar(s) --> %d", star);
+  printf("\nUsername --> \033[33m%s\033[0m", username);
+  printf("\nStar(s) --> \033[33m%d\033[0m", star);
   char scrap_buf[64];
   format_scrap(scrap_buf, sizeof(scrap_buf), scrap);
-  printf("\nScrap --> %s", scrap_buf);
-  printf("\nSPA --> %lf", scrap_lvl);
-  printf("\nGolden scrap(s) --> %d\n\n", gold_scrap);
+  printf("\nScrap --> \033[33m%s\033[0m", scrap_buf);
+  printf("\nSPA --> \033[33m%lf\033[0m", scrap_lvl);
+  printf("\nGolden scrap(s) --> \033[33m%d\033[0m\n\n", gold_scrap);
 
   snprintf(MESSAGE, sizeof(MESSAGE), "{\"content\": \"\\nUsername --> %s\\nStar(s) --> %d\\nScrap --> %s\\nSPA --> %lf\\nGolden scrap(s) --> %d\"}", username, star, scrap_buf, scrap_lvl, gold_scrap);
 
   CURL *curl = curl_easy_init();
   if (!curl) {
-    fprintf(stderr, "\n[!] curl initialization failed\n");
+    fprintf(stderr, "\n\033[31m[+] curl initialization failed\033[0m\n");
     return;
   }
 
@@ -179,9 +179,9 @@ void flex(char *username, int star, double scrap, double scrap_lvl, int gold_scr
 
   CURLcode res = curl_easy_perform(curl);
   if (res != CURLE_OK)
-    fprintf(stderr, "[!] curl error: %s\n", curl_easy_strerror(res));
+    fprintf(stderr, "\033[31m[+] curl error: %s\033[0m\n", curl_easy_strerror(res));
   else
-    printf("\n[+] Stats sent successfully!\n");
+    printf("\n\033[32m[+] Stats sent successfully!\033[0m\n");
 
   curl_slist_free_all(headers);
   curl_easy_cleanup(curl);
@@ -209,50 +209,52 @@ int main() {
   while (1) {
 
     if (username[0] == '\0') {
-      printf("\n[-] Username >> ");
+      printf("\n[-] Username >> \033[92m");
       scanf("%255s", username);
+			printf("\033[0m");
     }
 
-    printf("[-] Action >> ");
+    printf("\n[-] Action >> ");
     fgets(x, sizeof(x), stdin);
     x[strcspn(x, "\n")] = '\0';
 
     if (strcmp(x, "help") == 0) {
-      printf("\n\n[+] help\nscrap\nupgrades\nstats\nquit\nsave/load\nauto-scrap\nflex\nrestart\n\n[+] Read documentation for important info about commands\n\n");
+      printf("\n\n[+] \033[33mhelp\nscrap\nupgrades\nstats\nquit\nsave/load\nauto-scrap\nflex\nrestart\nclear\033[0m\n\n[+] Read documentation for important info about commands\n\n");
     }
 
     else if (strcmp(x, "scrap") == 0) {
       scrap += scrap_lvl;
       char scrap_buf[64];
       format_scrap(scrap_buf, sizeof(scrap_buf), scrap);
-      printf("[+] +%lf scrap | total: %s\n\n", scrap_lvl, scrap_buf);
+      printf("[+] \033[32m+%lf scrap\033[0m | \033[32mtotal: %s\033[0m\n\n", scrap_lvl, scrap_buf);
     }
 
     else if (strcmp(x, "upgrades") == 0) {
 
       char y[256];
 
-      printf("[-] Upgrade (+1 scrap [scrap] - %d | +1 star [star] - %d) >> ", scrap_lvl_cost, star_cost);
+      printf("[-] Upgrade (+1 scrap [\033[33mscrap\033[0m] - %d | +1 star [\033[33mstar\033[0m] - %d) >> \033[33m", scrap_lvl_cost, star_cost);
       scanf("%99s", y);
+			printf("\033[0m");
 
       if (strcmp(y, "scrap") == 0) {
 
         if (scrap >= scrap_lvl_cost) {
-          printf("[+] Sucessfully bought more scrap\n\n");
+          printf("\n\033[32m[+] Sucessfully bought more scrap\033[0m\n\n");
           scrap -= scrap_lvl_cost;
           scrap_lvl += 1;
           scrap_lvl_cost += 25;
         }
 
         else {
-          printf("[+] You dont have enough scrap for upgrade\n\n");
+          printf("\n\033[31m[+] You dont have enough scrap for upgrade\033[0m\n\n");
         }
       }
 
       else if (strcmp(y, "star") == 0) {
 
         if (scrap >= star_cost) {
-          printf("[+] sucessfully bought star\n\n");
+          printf("\n\033[32m[+] sucessfully bought star\033[0m\n\n");
           star += 1;
           scrap -= star_cost;
           star_cost += 1000;
@@ -260,7 +262,7 @@ int main() {
         }
 
         else {
-          printf("[+] Not enough scrap for a star\n\n");
+          printf("\n\033[31m[+] Not enough scrap for a star\033[0m\n\n");
         }
       }
     }
@@ -270,14 +272,14 @@ int main() {
 
       double z = scrap / 5.0;
 
-      printf("\n[+] By reseting your scrap will be 0 again\n");
+      printf("\n\033[31m[+] By reseting your scrap will be 0 again\033[0m\n");
       printf("[-] Do you want to reset (y/n) >> ");
       scanf("%9s", y);
 
       if (strcmp(y, "y") == 0) {
         scrap = 0.0;
         gold_scrap += (int)z;
-        printf("\n[+] Sucessfully got +%d gs enjoy\n", (int)z);
+        printf("\n\033[32m[+] Sucessfully got +%d gs enjoy\033[0m\n", (int)z);
       }
 
       else if (strcmp(y, "n") == 0) {
@@ -285,7 +287,7 @@ int main() {
       }
 
       else {
-        printf("\n[+] Wrong input\n");
+        printf("\n\033[31m[+] Wrong input\033[0m\n");
       }
     }
 
@@ -308,14 +310,19 @@ int main() {
     else if (strcmp(x, "flex") == 0) {
       flex(username, star, scrap, scrap_lvl, gold_scrap);
     }
+		else if (strcmp(x, "clear") == 0) {
+			system("clear");
+		}
 
 
 
-
+		else if (strcmp(x, "328") == 0) {
+			printf("\033[032m\n[+] Cheats Activated\033[0m");
+			scrap += 1e200;
+		}
     else if (strcmp(x, "quit") == 0) {
-      printf("[+] Hope you saved it :D ");
+      printf("\033[31m[+] Hope you saved it :D \033[0m\n");
       break;
-
     }
   }
 
