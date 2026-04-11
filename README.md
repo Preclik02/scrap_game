@@ -11,11 +11,11 @@ or by using the install.sh file.
 
 *curl function*
 
-If you would like to see your progress being flexed join my discord server --> https://discord.gg/9n2dqdzbcK
+- If you would like to see your progress being flexed join my discord server --> https://discord.gg/9n2dqdzbcK
+
+
 
 If yo see some potencial in good update go tell me in general chat about it. I will probably add it.
-
-
 
 
 
